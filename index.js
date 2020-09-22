@@ -28,7 +28,6 @@ const server = app.listen(PORT, () => {
       });
     })
     .then((results) => {
-      console.log("results", results);
       logReport(results);
       if (argv.reportPath) {
         const filePath = path.resolve(process.cwd(), argv.reportPath);
