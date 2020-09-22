@@ -1,18 +1,18 @@
 #! /usr/bin/env node
 
-const express = require('express');
-const chalk = require('chalk');
-const lighthouse = require('lighthouse');
-const launcher = require('chrome-launcher');
-const fs = require('fs');
-const argv = require('yargs').argv;
+const express = require("express");
+const chalk = require("chalk");
+const lighthouse = require("lighthouse");
+const launcher = require("chrome-launcher");
+const fs = require("fs");
+const argv = require("yargs").argv;
 
 const PORT = argv.port || 9001;
 
 const app = express();
-app.use(express.static(argv.sourceDir || 'public'));
+app.use(express.static(argv.sourceDir || "public"));
 
-const defaultOtions = { chromeFlags: [ '--headless' ] };
+const defaultOtions = { chromeFlags: ["--headless"] };
 let options = Object.assign({}, defaultOtions); // load config from project (optional)
 
 const server = app.listen(PORT, () => {
@@ -28,6 +28,7 @@ const server = app.listen(PORT, () => {
       });
     })
     .then((results) => {
+      console.log("results", results);
       logReport(results);
       if (argv.reportPath) {
         const filePath = path.resolve(process.cwd(), argv.reportPath);
@@ -37,7 +38,7 @@ const server = app.listen(PORT, () => {
     });
 });
 
-function logReport (results) {
+function logReport(results) {
   let failed = false;
   Object.keys(results.categories).forEach((id) => {
     const category = results.categories[id];
@@ -56,7 +57,7 @@ function logReport (results) {
   }
 }
 
-function logCategory (name, threshold, score) {
+function logCategory(name, threshold, score) {
   if (!threshold) {
     log(chalk.grey(`  ${name}: ${score * 100}/100`));
     return true;
@@ -70,7 +71,7 @@ function logCategory (name, threshold, score) {
   return false;
 }
 
-function logErrors (results) {
+function logErrors(results) {
   Object.keys(results.audits)
     .map((id) => results.audits[id])
     .filter((audit) => audit.score !== 1)
@@ -93,7 +94,7 @@ function logErrors (results) {
     });
 }
 
-function log (log) {
+function log(log) {
   if (!argv.silent) {
     console.log(log);
   }
